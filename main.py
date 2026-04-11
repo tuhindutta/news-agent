@@ -1,5 +1,4 @@
 import json
-import psycopg
 from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
