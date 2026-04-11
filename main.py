@@ -1,4 +1,5 @@
 import json
+import psycopg
 from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
@@ -67,11 +68,5 @@ async def stream_test_endpoint(query_input: QueryInput):
         stream_test(query_input),
         media_type="application/x-ndjson"
     )
-
-
-@app.post("/reset-checkpointer/")
-async def reset():
-    await checkpointer.reset_checkpointer()
-    return {"RESULT": "Checkpointer DB reset and re-initialized."}
 
 
