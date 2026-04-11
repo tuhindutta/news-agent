@@ -65,7 +65,7 @@ async def stream_test(query_input: QueryInput):
         await asyncio.sleep(1)
 
 @app.post("/stream-test/")
-async def invoke(query_input: QueryInput):
+async def stream_test_endpoint(query_input: QueryInput):
     return StreamingResponse(
         stream_test(query_input),
         media_type="application/x-ndjson"
