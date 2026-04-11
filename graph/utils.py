@@ -13,28 +13,6 @@ def format_chat_history(hist:List[BaseMessage]) -> str:
     return text
 
 
-# client = MultiServerMCPClient(
-#         {
-#             "news_and_url_scraping": {
-#                 "transport": "http",
-#                 "url": "http://localhost:8000/mcp"
-#             }
-#         }
-#     )
-
-
-# async def get_tools_response(call:ToolDecide) -> str:
-
-#     tools = await client.get_tools()
-#     tools_map = {i.name:i for i in tools}
-#     tool = tools_map[call.tool_name]
-#     args = {list(tool.args.keys())[0] : call.tool_input}
-
-#     res = await tool.ainvoke(args)
-#     res = '\n\n'.join([i['text'] for i in res])
-    
-#     return res
-
 
 class ToolResponse:
 
@@ -50,14 +28,17 @@ class ToolResponse:
 
     async def get_tools_response(self, call:ToolDecide) -> str:
 
-        tools = await self.__client.get_tools()
-        tools_map = {i.name:i for i in tools}
-        tool = tools_map[call.tool_name]
-        args = {list(tool.args.keys())[0] : call.tool_input}
+        try:
+            tools = await self.__client.get_tools()
+            tools_map = {i.name:i for i in tools}
+            tool = tools_map[call.tool_name]
+            args = {list(tool.args.keys())[0] : call.tool_input}
 
-        res = await tool.ainvoke(args)
-        res = '\n\n'.join([i['text'] for i in res])
+            res = await tool.ainvoke(args)
+            res = '\n\n'.join([i['text'] for i in res])
+
+        except Exception as e:
+            res = f"""Error invoking tool {call.tool_name} with input {call.tool_input}: {str(e)}"""
         
         return res
-    
 

@@ -25,9 +25,8 @@ async def lifespan(app: FastAPI):
     global graph
     # --- Startup Logic (before yield) ---
     print("🚀 Application starting...")
-    
-    # checkpointer = Checkpointer(Config.POSTGRES_CHECKPOINTER_URI, Agent())
-    # await checkpointer.setup_checkpointer()
+    print(f"MCP URL: {Config.MCP_URI}")
+    print(f"Postgres URL: {Config.POSTGRES_CHECKPOINTER_URI}")
     
     async with AsyncPostgresSaver.from_conn_string(Config.POSTGRES_CHECKPOINTER_URI) as chk:
         await chk.setup()
