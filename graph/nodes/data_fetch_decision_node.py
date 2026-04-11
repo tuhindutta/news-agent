@@ -27,9 +27,9 @@ Return ONLY valid JSONs in list. Do not include explanations, text, or formattin
 Strict format:
 [
     {{
-      "use_tool": True or False,
-      "tool_name": "get_latest_news" | "scrape_website" | None,
-      "tool_input": string or None,
+      "use_tool": true or false,
+      "tool_name": "get_latest_news" | "scrape_website" | null,
+      "tool_input": string or null,
       "decision_reason": string (reason for tool use decision)
     }}
 ]
@@ -39,6 +39,8 @@ Messages history: {format_chat_history(state.get("messages")[state.get("summariz
 """.strip()
     # llm_struc_op = llm.with_structured_output(ToolRequirement)
     response = await summary_llm.ainvoke(query)
+
+    # print(f"{inspect.currentframe().f_code.co_name}:{response}\n\n\n")
 
     res = json.loads(response.content)
     require_fetching = any([i["use_tool"] for i in res])

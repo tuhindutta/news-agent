@@ -57,7 +57,8 @@ Tool output data:
             )
 
     full_summary = '\n\n'.join(summaries)
-    # full_summary = chain.invoke({"outputs": '\n'.join(summaries)}).content
+
+    # print(f"{inspect.currentframe().f_code.co_name}:{full_summary}\n\n\n")
 
     return {
         "tool_output_summary": full_summary,

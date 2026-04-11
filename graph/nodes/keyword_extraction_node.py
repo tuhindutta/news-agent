@@ -45,6 +45,8 @@ Query: {query}
                     decision_reason=call.decision_reason
                 )
                 fragmented.append(new_call)
+
+    # print(f"{inspect.currentframe().f_code.co_name}:{fragmented}\n\n\n")
     return {
         "tools_required": fragmented,
         "run_till": inspect.currentframe().f_code.co_name

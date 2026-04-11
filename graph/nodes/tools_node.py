@@ -16,8 +16,7 @@ async def tools_node(state: State):
         msg = await tool_res.get_tools_response(call)
         messages.append(ToolOutput(input=call.tool_input, output=msg))
             
-    # state["messages"].extend(messages)
-    # print(state)
+    # print(f"{inspect.currentframe().f_code.co_name}:{messages}\n\n\n")
     
     return {
         "tool_output": messages,

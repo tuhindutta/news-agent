@@ -33,6 +33,8 @@ Previous chat history:
 
     response = await llm.ainvoke(query, config={"tools": {"tool_choice": "none"}})
 
+    # print(f"{inspect.currentframe().f_code.co_name}:{response}\n\n\n")
+
     messages = {
         "messages" : [AIMessage(response.content)],
         "llm_input_prompt": query,

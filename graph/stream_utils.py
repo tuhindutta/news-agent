@@ -1,5 +1,5 @@
 
-
+import json
 from graph.state import ToolDecide
 from langgraph.graph.state import CompiledStateGraph
 
@@ -64,10 +64,12 @@ async def generate_graph_stream(graph: CompiledStateGraph, user_input: str, user
                 fn = stream_map.get(node_name)
                 if fn is not None:
                     stream_output = fn(response)
-                    yield {
+                    output = {
                         "node_name": node_name,
                         "node_output": stream_output
                     }
+                    output = json.dumps(output) + "\n"
+                    yield output
         elif mode == "custom":
             inp = contents.get("input")
             otp = contents.get("output")
@@ -76,7 +78,9 @@ Query: {inp}
 
 Output: {otp}
             """.strip()
-            yield {
+            output = {
                 "node_name": "tool_output_summarize_node",
                 "node_output": text
             }
+            output = json.dumps(output) + "\n"
+            yield output

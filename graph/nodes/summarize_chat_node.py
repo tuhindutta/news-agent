@@ -53,8 +53,7 @@ async def summarize_chat_node(state:State):
     chain = prompt | summary_llm
     res = await chain.ainvoke({"chat":formatted_message, "chat_summary":state.get("chat_summary", "None")})
 
-    # messages_to_remove = [RemoveMessage(id=m.id) for m in message_to_summarize] 
-
+    # print(f"{inspect.currentframe().f_code.co_name}:{res}\n\n\n")
     return {
         "chat_summary": res.content,
         "summarized_till_index": summarized_till_index + len(message_to_summarize),
