@@ -26,6 +26,7 @@ Unlike simple chatbot implementations, this system separates:
 The agent is built using a **graph-based execution model** powered by StateGraph, where each node represents a distinct stage in the reasoning pipeline.
 
 ### High-Level Flow
+
 ```
 User Query → Decision → Keyword Extraction → Tool Invocation → Tool Summarization → LLM Response → Streaming Output
 ```
@@ -206,6 +207,42 @@ This provides:
 - Structured output enforcement  
 - Observability (tracing, metrics, logging)  
 - Dynamic graph execution (runtime node injection)  
+
+---
+
+## 13. Security & Access Model
+
+This service is **not designed for direct public access** and is intended to operate behind a secure gateway layer.
+
+### CORS Policy
+
+CORS is **not enabled** in this FastAPI service.
+
+### Rationale
+
+- The agent is not meant to be consumed directly from browser-based clients  
+- All external interactions are expected to go through an upstream **gateway layer**  
+- The gateway is responsible for:
+  - Authentication  
+  - Authorization  
+  - Rate limiting  
+  - Request validation  
+  - CORS handling  
+
+### Architecture Enforcement
+
+```
+Client (Browser/UI) → Gateway → Agent → MCP Server
+```
+
+This ensures:
+- Reduced attack surface  
+- Centralized security controls  
+- Cleaner separation of concerns  
+
+### Development Note
+
+If direct browser access is required for local development or testing, CORS can be temporarily enabled. However, it is **intentionally excluded in the default setup** to maintain architectural integrity.
 
 ---
 
