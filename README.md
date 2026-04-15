@@ -263,10 +263,11 @@ The agent responds using a streaming interface, where each chunk represents inte
 
 #### Example Stream Events:
 ```json
-{"node_name":"data_fetch_decision_node","node_output":"Determining if external data is required..."}
-{"node_name":"keyword_extraction_node","node_output":"AI regulation, policy updates, global AI laws"}
-{"node_name":"tool_output_summarize_node","node_output":"Summarized key articles..."}
-{"node_name":"llm_node","node_output":"Recent developments in AI regulation include..."}
+{"type":"node","node_name":"data_fetch_decision_node","node_output":"Determining if external data is required..."}
+{"type":"node","node_name":"keyword_extraction_node","node_output":"AI regulation, policy updates, global AI laws"}
+{"type":"node","node_name":"tool_output_summarize_node","node_output":"Summarized key articles..."}
+{"type":"node","node_name":"llm_node","node_output":"Recent developments in AI regulation include..."}
+{"type":"done"}
 ```
 ### Design Considerations
 - Streaming-first design
