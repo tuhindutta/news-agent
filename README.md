@@ -200,17 +200,7 @@ This provides:
 
 ---
 
-## 12. Future Enhancements
-
-- Adaptive tool selection strategies  
-- Reinforcement-based decision optimization  
-- Structured output enforcement  
-- Observability (tracing, metrics, logging)  
-- Dynamic graph execution (runtime node injection)  
-
----
-
-## 13. Security & Access Model
+## 12. Security & Access Model
 
 This service is **not designed for direct public access** and is intended to operate behind a secure gateway layer.
 
@@ -243,6 +233,60 @@ This ensures:
 ### Development Note
 
 If direct browser access is required for local development or testing, CORS can be temporarily enabled. However, it is **intentionally excluded in the default setup** to maintain architectural integrity.
+
+---
+
+## 13. Input & Output Contract
+
+### Request Format
+
+The agent is exposed via a streaming HTTP endpoint using FastAPI.
+
+**Request Body (example):**
+
+```json
+{
+  "user_id": "user_123",
+  "thread_id": "thread_456",
+  "query": "Explain latest developments in AI regulation"
+}
+```
+
+### Fields
+- `user_id` ‒  Unique identifier for the user
+- `thread_id` ‒ Identifier for maintaining conversation continuity
+- `query` ‒ User input / question
+
+### Response Format (Streaming)
+
+The agent responds using a streaming interface, where each chunk represents intermediate execution updates.
+
+#### Example Stream Events:
+```json
+{"node_name":"data_fetch_decision_node","node_output":"Determining if external data is required..."}
+{"node_name":"keyword_extraction_node","node_output":"AI regulation, policy updates, global AI laws"}
+{"node_name":"tool_output_summarize_node","node_output":"Summarized key articles..."}
+{"node_name":"llm_node","node_output":"Recent developments in AI regulation include..."}
+```
+### Design Considerations
+- Streaming-first design
+  - Enables real-time feedback and transparency
+- Node-level granularity
+  - Each step in the reasoning pipeline is exposed
+- State-aware responses
+  - Outputs are influenced by prior conversation stored in PostgreSQL
+- LLM-friendly structure
+  - Outputs are simple and directly consumable without strict schema enforcement
+
+---
+
+## 14. Future Enhancements
+
+- Adaptive tool selection strategies  
+- Reinforcement-based decision optimization  
+- Structured output enforcement  
+- Observability (tracing, metrics, logging)  
+- Dynamic graph execution (runtime node injection)  
 
 ---
 
