@@ -50,37 +50,59 @@ stream_map = {
 
 async def generate_graph_stream(graph: CompiledStateGraph, user_input: str, user_id: str, theread_id: str):
     """Async generator to wrap LangGraph stream."""
+    current_node = "unknown"
     inputs = {"messages": user_input}
     config = {"configurable": {"user_id": user_id, "thread_id": theread_id}}
     async for chunk in graph.astream(
         inputs, config,
         stream_mode=["updates", "custom"]
     ):
-        mode = chunk[0]
-        contents = chunk[1]
-        if mode == "updates":
-            for node_name, response in contents.items():
-                # last_node = state.get("run_till")
-                fn = stream_map.get(node_name)
-                if fn is not None:
-                    stream_output = fn(response)
-                    output = {
-                        "node_name": node_name,
-                        "node_output": stream_output
-                    }
-                    output = json.dumps(output) + "\n"
-                    yield output
-        elif mode == "custom":
-            inp = contents.get("input")
-            otp = contents.get("output")
-            text = f"""
+        try:
+            mode = chunk[0]
+            contents = chunk[1]
+            if mode == "updates":
+                for node_name, response in contents.items():
+                    current_node = node_name
+                    fn = stream_map.get(node_name)
+                    if fn is not None:
+                        stream_output = fn(response)
+                        output = {
+                            "type": "node",
+                            "node_name": node_name,
+                            "node_output": stream_output
+                        }
+                        output = json.dumps(output) + "\n"
+                        yield output
+
+            elif mode == "custom":
+                inp = contents.get("input")
+                otp = contents.get("output")
+                current_node = "tool_output_summarize_node"
+                text = f"""
 Query: {inp}
 
 Output: {otp}
-            """.strip()
+                """.strip()
+                output = {
+                    "type": "node",
+                    "node_name": current_node,
+                    "node_output": text
+                }
+                output = json.dumps(output) + "\n"
+                yield output
+
+        except Exception as e:
             output = {
-                "node_name": "tool_output_summarize_node",
-                "node_output": text
-            }
+                    "type": "error",
+                    "node_name": current_node,
+                    "message": str(e)
+                }
             output = json.dumps(output) + "\n"
             yield output
+            return
+
+    output = {
+                "type": "done"
+            }
+    output = json.dumps(output) + "\n"
+    yield output
