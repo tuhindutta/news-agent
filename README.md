@@ -281,7 +281,40 @@ The agent responds using a streaming interface, where each chunk represents inte
 
 ---
 
-## 14. Future Enhancements
+## 14. Environment Configuration
+
+The agent requires the following environment variables to be set before running.
+
+### Required Variables
+
+```bash
+# OpenAI / LLM Configuration
+OPENAI_API_KEY=your_api_key
+
+# Database Configuration (PostgreSQL)
+POSTGRES_CHECKPOINTER_URI=postgresql://admin:admin@news-agent-postgres:5432/newsagent
+
+# MCP Server Configuration
+MCP_URI=http://localhost:8000/mcp
+```
+
+### Description
+
+- **OPENAI_API_KEY**  
+  Used for accessing GPT-5 and GPT-5-nano models
+
+- **POSTGRES_CHECKPOINTER_URI**  
+  Used for managing:
+  - User sessions  
+  - Thread IDs  
+  - Conversation state  
+
+- **MCP_URI**  
+  Endpoint of the MCP server used for tool execution
+
+---
+
+## 15. Future Enhancements
 
 - Adaptive tool selection strategies  
 - Reinforcement-based decision optimization  
